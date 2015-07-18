@@ -1,0 +1,8 @@
+name: peg_transformer_sample
+version: 0.0.1
+description: A simple console application.
+dependencies:
+  peg:
+    path: ../peg
+transformers:
+  - peg
