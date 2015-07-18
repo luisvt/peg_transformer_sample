@@ -2,7 +2,7 @@
 
 This repository contains an arithmetic parser sample that uses [peg](https://pub.dartlang.org/packages/peg).
 
-As you can see in the [pubspect.yml](./pubspect.yml) file you only need to do three things:
+As you can see in the [pubspec.yml](./pubspec.yml) file you only need to do three things:
 
 1. Add the transformer:
 
