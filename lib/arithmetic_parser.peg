@@ -1,0 +1,100 @@
+%{
+num _buildBinary(num first, List rest) {
+  num builder(num result, List element) {
+    var left = result;
+    var right = element[1];
+    var operator = element[0];
+    switch(operator) {
+      case "+":
+        return left + right;
+      case "-":
+        return left - right;
+      case "*":
+        return left * right;
+      case "/":
+        return left / right;
+      default:
+        throw "Unsupported binary operation '$operator'";
+    }
+  };
+  return _buildTree(first, rest, builder);
+}
+
+num _buildTree(num first, List rest, builder(num result, List rest)) {
+  var result = first;    
+  for (var i = 0; i < rest.length; i++) {
+    result = builder(result, rest[i]);
+  }
+  return result;
+}
+
+num _unary(String operator, num operand) {  
+  switch (operator) {   
+    case "-":
+      return - operand;    
+    default:
+      throw "Unsupported unary operation '$operator'";
+  }
+}
+
+}%
+
+### Sentences (nonterminals) ###
+
+Start <-
+  LEADING_SPACES? Expression EOF { $$ = $2; }
+
+Expression <-
+  AdditiveExpression
+
+AdditiveExpression <-
+  MultiplicativeExpression ((PLUS / MINUS) MultiplicativeExpression)* { $$ = _buildBinary($1, $2); }
+
+MultiplicativeExpression <-
+  UnaryExpression ((DIV / MUL) UnaryExpression)* { $$ = _buildBinary($1, $2); }
+
+UnaryExpression <-
+  PrimaryExpression
+  / MINUS UnaryExpression { $$ = _unary($1, $2); }
+
+PrimaryExpression <-
+  CONSTANT
+  / LPAREN Expression RPAREN { $$ = $2; }
+
+### Lexemes (tokens) ###
+
+CONSTANT <-
+  NUMBER
+
+EOF <-
+  !.
+
+LEADING_SPACES <-
+  WS
+
+LPAREN <-
+  '(' WS { $$ = $1; }
+
+RPAREN <-
+  ')' WS { $$ = $1; }
+
+### Morphemes ###
+
+DIV <-
+  '/' WS { $$ = $1; }
+
+MINUS <-
+  '-' WS { $$ = $1; }
+
+MUL <-
+  '*' WS { $$ = $1; }
+
+NUMBER <-
+  [0-9]+ WS { $$ = int.parse($1.join()); }
+
+PLUS <-
+  '+' WS { $$ = $1; }
+
+WS <-
+  ([\t-\n\r ] / '\r\n')*
+

@@ -1,12 +1,14 @@
-library peg.example.arithmetic;
+// Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
+// is governed by a BSD-style license that can be found in the LICENSE file.
 
+import 'dart:html';
+import "package:peg_transformer_sample/arithmetic_parser.dart";
 import "package:parser_error/parser_error.dart";
 
-import "package:peg_transformer_sample/arithmetic_parser.dart";
-
 void main() {
-  var result = parse("1 + 2 * (3 + 4) * 5");
-  print(result);
+  querySelector('#input').onChange.listen((e) {
+    querySelector('#output').text = parse(e.target.value).toString();
+  });
 }
 
 num parse(String string) {
